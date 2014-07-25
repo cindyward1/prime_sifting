@@ -1,37 +1,24 @@
 def prime_sifting(input_number)
 
   number_list = (2..(input_number-1)).to_a
-  prime_list = []
-  prime = 2
-  temp_list = [2]
 
   number_list.each do |prime|
-    if (prime != 0) && (prime < (input_number.to_f/prime).ceil)
+    # prime_limit is the highest number of times plus 1 (for using < ) prime will divide
+    # into the input_number. It serves to limit the number of times the number_list
+    # traverse is performed. input_number is converted to a float so the result from
+    # dividing by prime is not truncated to the nearest integer
+    prime_limit = (input_number.to_f/prime).ceil
+    if prime < prime_limit
       number_list.each do |number_list_item|
-        if (temp_list.length != 0)
-          temp_list.each do |number_multiply_by|
-            trial_number = prime * number_multiply_by
-            if (number_list_item != 0) && (trial_number < input_number)
-              if number_list[number_list_item-2] == trial_number
-                if (prime == 2) && (number_list_item != 2)
-                  temp_list.push(number_list[number_list_item-2])
-                end
-                number_list[number_list_item-2] = 0
-              elsif (number_list_item < trial_number) && (number_list_item > temp_list[temp_list.length-1])
-                temp_list.push(number_list[number_list_item-2])
-              end
-            end
-          end
+    # delete the current item from the number_list if it is divisible by the current prime
+    # number (but is not the current prime number)
+        if (number_list_item % prime) == 0 && (number_list_item != prime)
+          number_list.delete(number_list_item)
         end
       end
     end
   end
 
-  number_list.each do |output_number|
-    if output_number != 0
-      prime_list.push (output_number)
-    end
-  end
-  return prime_list
+  return number_list
 
 end
